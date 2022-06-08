@@ -1,5 +1,11 @@
 import { renderSidebar, renderContent, bindFacetChange } from './rendering.js';
-import { getDocumentPrice, getDocumentReleaseYear, tokenize, sliceLastNumberDigit } from './helpers.js';
+import {
+  getDocumentPrice,
+  getDocumentReleaseYear,
+  tokenize,
+  sliceNumberLastDigit,
+  getNumberLastDigit,
+} from './helpers.js';
 
 const PRICE_CONSTANT = 5;
 
@@ -106,12 +112,7 @@ export function getPricesFacet(filteredDocuments) {
     }
   }
 
-  biggestPrice = Math.ceil(biggestPrice);
-  if (biggestPrice % PRICE_CONSTANT !== 0) {
-    biggestPrice = sliceLastNumberDigit(biggestPrice);
-    biggestPrice = String(biggestPrice) + PRICE_CONSTANT;
-    biggestPrice = Number(biggestPrice);
-  }
+  biggestPrice = calculateBiggestPrice(biggestPrice);
 
   while (upper <= biggestPrice) {
     let count = 0;
@@ -135,6 +136,24 @@ export function getPricesFacet(filteredDocuments) {
   }
 
   return pricesFacet;
+}
+
+export function calculateBiggestPrice(biggestPrice) {
+  biggestPrice = Math.ceil(biggestPrice);
+  if (biggestPrice % PRICE_CONSTANT !== 0) {
+    const lastNumber = getNumberLastDigit(biggestPrice);
+    let increaseNumber = PRICE_CONSTANT;
+
+    if (lastNumber > PRICE_CONSTANT) {
+      increaseNumber += PRICE_CONSTANT;
+    }
+
+    biggestPrice = sliceNumberLastDigit(biggestPrice);
+    biggestPrice = String(biggestPrice) + increaseNumber;
+    biggestPrice = Number(biggestPrice);
+  }
+
+  return biggestPrice;
 }
 
 export function getYearsFacet(filteredDocuments) {

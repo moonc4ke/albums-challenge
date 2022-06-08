@@ -24,6 +24,10 @@ export function getDocumentReleaseYear(document) {
   return new Date(Date.parse(document['im:releaseDate'].label)).getFullYear();
 }
 
-export function sliceLastNumberDigit(number) {
+export function sliceNumberLastDigit(number) {
   return Math.floor(number / 10);
+}
+
+export function getNumberLastDigit(number) {
+  return +number.toString().split('').pop();
 }
