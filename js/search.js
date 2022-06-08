@@ -39,9 +39,7 @@ export function search(searchQuery, filters, data) {
   const yearsFacet = getYearsFacet(filteredDocuments);
 
   return {
-    // TODO: filter by selected facets
     documents: filteredDocuments,
-    // TODO: generate facets from matched documents data
     facets: {
       price: pricesFacet,
       year: yearsFacet,
